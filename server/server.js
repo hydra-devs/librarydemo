@@ -1,17 +1,17 @@
 import express, { urlencoded } from "express";
+import { PORT } from "./config/env.js";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
-const PORT = 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser()); // for parsing cookie ..jwt token!
 
-app.use("/api/v1/auth", authRoutes);
+app.use("/api/auth", authRoutes); // Routes end points
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Server is Running...");
 });
 
 app.listen(PORT, () => {
