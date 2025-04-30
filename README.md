@@ -29,6 +29,6 @@ A simple Express.js library management demo with basic authentication and book m
 - `routes/` - Express.js route definitions
 
 # Method | Endpoint | Description
-POST | /api/auth/register | Register a new user
-POST | /api/auth/login | Login and get token
+- POST | /api/auth/register | Register a new user
+- POST | /api/auth/login | Login and get token
 
