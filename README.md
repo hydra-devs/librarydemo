@@ -1,5 +1,5 @@
 
-# 📚 Library Demo 
+# 📚 Library Demo API
 
 A simple Express.js library management demo with basic authentication and book management features.
 
