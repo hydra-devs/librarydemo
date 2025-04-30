@@ -1,4 +1,5 @@
 import Book from "../models/books.model.js";
+import User from "../models/user.model.js";
 import { createError } from "../utils/createError.js";
 
 export const createBook = async (req, res, next) => {
@@ -42,6 +43,22 @@ export const viewBooks = async (req, res, next) => {
     err.status = 401;
     return next(err);
   }
+};
+export const myBook = async (req, res, next) => {
+  const userexist = await User.findById(req.user);
+  if (!userexist) {
+    return next(createError("User not found", 401));
+  }
+
+  const mybook = await Book.find({ authorId: req.user })
+    .populate({ path: "authorId", select: "name username email -_id" })
+    .select("-_id");
+
+  res.status(200).json({
+    success: true,
+    message: "Book fetched successfully",
+    mybook,
+  });
 };
 
 export const viewBook = async (req, res, next) => {};

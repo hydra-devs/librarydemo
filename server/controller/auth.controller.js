@@ -24,24 +24,28 @@ export const register = async (req, res, next) => {
   //hashing password
   const HashPassword = await bycrypt.hash(password, 10);
 
-  //generate jwt token
-  const token = jwt.sign({ Userid: User._id }, JWT_SECRET, {
-    expiresIn: JWT_EXPIRE,
-  });
-
   //insert to DB
   try {
-    const user = new User({
+    const newUser = new User({
       name: fullname,
       username,
       email,
       password: HashPassword,
     });
-    await user.save();
+    await newUser.save();
+    //generate jwt token
+    const token = jwt.sign({ userId: newUser.id }, JWT_SECRET, {
+      expiresIn: JWT_EXPIRE,
+    });
     res.status(200).json({
       success: true,
       message: "User created successfully",
-      user,
+      data: {
+        userid: newUser.id,
+        fullname: newUser.name,
+        username: newUser.username,
+        email: newUser.email,
+      },
       token,
     });
   } catch (err) {
@@ -72,7 +76,7 @@ export const login = async (req, res, next) => {
     }
 
     //generate jwt token
-    const token = jwt.sign({ Userid: User._id }, JWT_SECRET, {
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
       expiresIn: JWT_EXPIRE,
     });
     //send response
@@ -81,7 +85,7 @@ export const login = async (req, res, next) => {
       success: true,
       message: "Login successful",
       username,
-      userId: user._id,
+      userId: user.id,
       token,
     });
   } catch (err) {
