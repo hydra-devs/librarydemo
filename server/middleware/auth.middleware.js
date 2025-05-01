@@ -10,7 +10,6 @@ export const authMiddleware = async (req, res, next) => {
   }
   const token = req.headers.authorization.split(" ")[1];
   if (!token) {
-    console.log("You are not authenticated");
     return next({ status: 401, msg: "Your are not loggedIn" });
   }
   try {

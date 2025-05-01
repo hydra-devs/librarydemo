@@ -13,11 +13,21 @@ export const register = async (req, res, next) => {
   if (!validator.isEmail(email)) {
     return next({ status: 401, msg: "Enter a valid email address" });
   }
+  const isEmailexist = await User.findOne({ email: email });
+  if (isEmailexist) {
+    return next({ status: 401, msg: "Email is already Registered" });
+  }
 
   if (password.length < 6) {
     return next({ status: 401, msg: "Password must be greater than 6" });
   } else if (password.length > 16) {
     return next({ status: 401, msg: "Password must be less than 16" });
+  }
+
+  const isUsernameExist = await User.findOne({ username: username });
+
+  if (isUsernameExist) {
+    return next({ status: 401, msg: "Username already exists" });
   }
 
   //hashing password
