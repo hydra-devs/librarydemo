@@ -29,6 +29,11 @@ A simple Express.js library management demo with basic authentication and book m
 - `routes/` - Express.js route definitions
 
 # Method | Endpoint | Description
-- POST | /api/auth/register | Register a new user
-- POST | /api/auth/login | Login and get token
+- `POST` | /api/auth/register | Register a new user
+- `POST` | /api/auth/login | Login
+- `POST` | /api/library/create | Create a new book
+- `POST` | /api/library/viewbooks | Retrieve all books
+- `POST` | /api/library/mybook | Retreive loggedin user book
+- `POST` | /api/library/viewbook/:id | Retreive a book by ID
+- `POST` | /api/library/delete/:id | Delete a book by ID
 
