@@ -11,10 +11,10 @@ import {
   myBook,
 } from "../controller/books.controller.js";
 
-bookRoutes.post("/create", createBook);
+bookRoutes.post("/create", authMiddleware, createBook);
 bookRoutes.get("/viewbooks", viewBooks);
-bookRoutes.get("/viewbook", viewBook);
+bookRoutes.get("/viewbook/:id", viewBook);
 bookRoutes.post("/mybook", authMiddleware, myBook);
-bookRoutes.post("/delete", deleteBook);
+bookRoutes.delete("/delete/:id", authMiddleware, deleteBook);
 
 export default bookRoutes;

@@ -2,9 +2,10 @@ import Book from "../models/books.model.js";
 import User from "../models/user.model.js";
 
 export const createBook = async (req, res, next) => {
-  const { title, description, authorId } = req.body;
+  const { title, description } = req.body;
+  const authorId = req.user;
 
-  if (!title || !description || !authorId) {
+  if (!title || !description) {
     return next({ status: 401, msg: "All fields are required" });
   }
   try {
@@ -52,7 +53,7 @@ export const myBook = async (req, res, next) => {
 
   const mybook = await Book.find({ authorId: req.user })
     .populate({ path: "authorId", select: "name username email -_id" })
-    .select("-_id");
+    .select("");
 
   res.status(200).json({
     success: true,
@@ -61,6 +62,47 @@ export const myBook = async (req, res, next) => {
   });
 };
 
-export const viewBook = async (req, res, next) => {};
+export const viewBook = async (req, res, next) => {
+  const bookId = req.params.id;
+  if (!bookId) {
+    return next({ status: 401, msg: "Book not found" });
+  }
 
-export const deleteBook = async (req, res, next) => {};
+  try {
+    const book = await Book.findById({ _id: bookId }).populate({
+      path: "authorId",
+      select: "name username email -_id",
+    });
+    if (!book) {
+      return next({ status: 401, msg: "Book not found" });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Book fetched successfully",
+      book,
+    });
+  } catch (err) {
+    err.msg = "Error fetching book";
+    err.status = 401;
+    return next(err);
+  }
+};
+
+export const deleteBook = async (req, res, next) => {
+  const bookId = req.params.id;
+  try {
+    const deletebook = await Book.findByIdAndDelete(bookId);
+    if (!deletebook) {
+      return next({ status: 401, msg: "Book not found" });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Book deleted successfully",
+      deletebook,
+    });
+  } catch (err) {
+    err.msg = "Error deleting book";
+    err.status = 401;
+    return next(err);
+  }
+};
