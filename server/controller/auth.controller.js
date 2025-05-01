@@ -1,7 +1,6 @@
 import validator from "validator";
 import bycrypt from "bcrypt";
 import { JWT_EXPIRE, JWT_SECRET } from "../config/env.js";
-import { createError } from "../utils/createError.js";
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
@@ -9,16 +8,16 @@ export const register = async (req, res, next) => {
   const { email, username, fullname, password } = req.body;
   //input validation
   if (!email || !username || !fullname || !password) {
-    return next(createError("All field are Required"));
+    return next({ status: 401, msg: "All fields are required" });
   }
   if (!validator.isEmail(email)) {
-    return next(createError("Invalid Email"));
+    return next({ status: 401, msg: "Enter a valid email address" });
   }
 
   if (password.length < 6) {
-    return next(createError("Password must be greater than 6 characters"));
+    return next({ status: 401, msg: "Password must be greater than 6" });
   } else if (password.length > 16) {
-    return next(createError("Password must be less than 16 characters"));
+    return next({ status: 401, msg: "Password must be less than 16" });
   }
 
   //hashing password
@@ -26,6 +25,7 @@ export const register = async (req, res, next) => {
 
   //insert to DB
   try {
+    //create new user
     const newUser = new User({
       name: fullname,
       username,
@@ -49,22 +49,25 @@ export const register = async (req, res, next) => {
       token,
     });
   } catch (err) {
-    console.log(err.message);
+    err.msg = "error creating user";
+    err.status = 401;
+    return next(err);
   }
 };
 
 export const login = async (req, res, next) => {
   const { username, password } = req.body;
 
-  try {
-    if (!username || !password) {
-      return next(createError("All field are Required", 400));
-    }
+  //check if input is valid
+  if (!username || !password) {
+    return next({ status: 401, msg: "All fields are required" });
+  }
 
+  try {
     const user = await User.findOne({ username });
 
     if (!user) {
-      return next(createError("Invalid username or password", 401));
+      return next({ status: 401, msg: "User not found" });
     }
 
     //verify password
@@ -72,7 +75,7 @@ export const login = async (req, res, next) => {
     const isPasswordValid = await bycrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return next(createError("Invalid username or password", 401));
+      return next({ status: 401, msg: "Invalid username and password" });
     }
 
     //generate jwt token

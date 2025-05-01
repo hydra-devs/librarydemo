@@ -18,11 +18,10 @@ app.use("/api/library", booksRoutes); // booksRoutes
 app.get("/", (req, res) => {
   res.send("Server is Running...");
 });
-
+// App Level Error Handler
 app.use(errorHandler);
 
 app.listen(PORT, async () => {
+  connectDB();
   console.log(`Server is up and  running on port ${PORT}`);
 });
-
-connectDB();

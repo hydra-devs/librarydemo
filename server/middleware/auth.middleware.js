@@ -1,5 +1,3 @@
-import { createError } from "../utils/createError.js";
-import { errorHandler } from "./errorMiddleware.js";
 import { JWT_SECRET } from "../config/env.js";
 import jwt from "jsonwebtoken";
 
@@ -8,11 +6,12 @@ export const authMiddleware = async (req, res, next) => {
     !req.headers.authorization &&
     !req.headers.authorization.startsWith("Bearer")
   ) {
-    return next(createError("You are not authenticated", 401));
+    return next({ status: 401, msg: "Your are not loggedIn" });
   }
   const token = req.headers.authorization.split(" ")[1];
   if (!token) {
-    return next(createError("You are not authenticated", 401));
+    console.log("You are not authenticated");
+    return next({ status: 401, msg: "Your are not loggedIn" });
   }
   try {
     //verify token

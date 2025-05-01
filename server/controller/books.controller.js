@@ -1,14 +1,13 @@
 import Book from "../models/books.model.js";
 import User from "../models/user.model.js";
-import { createError } from "../utils/createError.js";
 
 export const createBook = async (req, res, next) => {
   const { title, description, authorId } = req.body;
-  try {
-    if (!title || !description || !authorId) {
-      return next(createError("All fields are required", 400));
-    }
 
+  if (!title || !description || !authorId) {
+    return next({ status: 401, msg: "All fields are required" });
+  }
+  try {
     const book = new Book({
       title,
       description,
@@ -44,10 +43,11 @@ export const viewBooks = async (req, res, next) => {
     return next(err);
   }
 };
+
 export const myBook = async (req, res, next) => {
   const userexist = await User.findById(req.user);
   if (!userexist) {
-    return next(createError("User not found", 401));
+    return next({ status: 401, msg: "User not found" });
   }
 
   const mybook = await Book.find({ authorId: req.user })
