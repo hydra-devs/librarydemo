@@ -32,8 +32,8 @@ A simple Express.js library management demo with basic authentication and book m
 - `POST` | /api/auth/register | Register a new user
 - `POST` | /api/auth/login | Login
 - `POST` | /api/library/create | Create a new book
-- `POST` | /api/library/viewbooks | Retrieve all books
+- `GET` | /api/library/viewbooks | Retrieve all books
 - `POST` | /api/library/mybook | Retreive loggedin user book
-- `POST` | /api/library/viewbook/:id | Retreive a book by ID
-- `POST` | /api/library/delete/:id | Delete a book by ID
+- `GET` | /api/library/viewbook/:id | Retreive a book by ID
+- `DELETE` | /api/library/delete/:id | Delete a book by ID
 
