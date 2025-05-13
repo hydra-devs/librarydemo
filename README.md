@@ -31,6 +31,7 @@ A simple Express.js library management demo with basic authentication and book m
 # Method | Endpoint | Description
 - `POST` | /api/auth/register | Register a new user
 - `POST` | /api/auth/login | Login
+- `GET` | /api/auth/profile | User Profile
 - `POST` | /api/library/create | Create a new book
 - `GET` | /api/library/viewbooks | Retrieve all books
 - `POST` | /api/library/mybook | Retreive loggedin user book
