@@ -109,3 +109,25 @@ export const login = async (req, res, next) => {
     return next(err);
   }
 };
+
+export const profile = async (req, res, next) => {
+  try{
+    const profile = await User.findById(req.user).select("name username email -_id" )
+    if(!profile){
+      return next({ status: 401, msg: "Profile not found" });
+    }
+    return res.json({
+      success: true,
+      status: 200,
+      data:profile
+    });
+
+  }
+  catch (err) {
+    err.msg = "Invalid Request"
+    err.status = 401;
+    next(err);
+
+  }
+
+};
