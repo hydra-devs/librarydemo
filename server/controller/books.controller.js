@@ -2,23 +2,25 @@ import Book from "../models/books.model.js";
 import User from "../models/user.model.js";
 
 export const createBook = async (req, res, next) => {
-  const { title, description } = req.body;
+  const { title, description, isInstore } = req.body;
   const authorId = req.user;
 
   if (!title || !description) {
     return next({ status: 401, msg: "All fields are required" });
   }
+
   try {
     const book = new Book({
       title,
       description,
       authorId,
+      isInstore,
     });
     await book.save();
     res.status(200).json({
       success: true,
       message: "Book created Succesfully",
-      book,
+      content: book,
     });
   } catch (err) {
     err.msg = "Error creating book";

@@ -16,6 +16,11 @@ const booksSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    isInstore: {
+      type: Boolean,
+      required: true,
+      default: true,
+    },
     img: {
       type: String,
       required: true,
