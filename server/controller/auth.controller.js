@@ -55,8 +55,8 @@ export const register = async (req, res, next) => {
         fullname: newUser.name,
         username: newUser.username,
         email: newUser.email,
+        token,
       },
-      // token, //DEV: remove comment ,you might need temporarily for authentication to use other Endpoint
     });
   } catch (err) {
     err.msg = "error creating user";
@@ -97,9 +97,11 @@ export const login = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Login successful",
-      username,
-      userId: user.id,
-      //token, //DEV: remove comment ,you might need temporarily for authentication to use other Endpoint
+      data:{
+        username,
+        userId: user.id,
+        token,
+      },
     });
   } catch (err) {
     err.msg = "Login attempt failed";
